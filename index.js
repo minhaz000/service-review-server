@@ -43,7 +43,7 @@ app.get('/services', async(req,res)=>{
     if(q){ 
       const data = services.find({_id:ObjectId(q)})
       const result = await data.toArray() 
-      res.send(result)
+      res.send(result)   
     }
     else{
       const data   = services.find({}).limit(lim)
