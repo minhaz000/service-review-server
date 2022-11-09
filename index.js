@@ -37,10 +37,11 @@ app.get('/',(req ,res)=>{
   res.send(" Service Review server is running !!! ")
  })
 app.get('/services', async(req,res)=>{
-   const   q = parseInt(req.query.q) 
-    const data = services.find({}).limit(q)
+    const  q     = parseInt(req.query.q) 
+    const data   = services.find({}).limit(q)
     const result = await data.toArray()
     res.send(result)
+
  })
  app.post('/services', async(req,res)=>{
     serveiceObj = req.body.newService 
