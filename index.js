@@ -21,7 +21,7 @@ async function dataBaseInit(){
     console.log("DateBase Connected Sucessfully !!!".cyan.bold)
     
   } catch (error) {
-    console.log(error.massage.red.bold)
+    console.log(error.message.red.bold)
   }
 
 }
@@ -37,7 +37,6 @@ app.get('/',(req ,res)=>{
   res.send(" Service Review server is running !!! ")
  })
 app.get('/services', async(req,res)=>{
-  
     const lim = parseInt(req.query.l) 
     const q   = req.query.q
     if(q){ 
@@ -50,9 +49,6 @@ app.get('/services', async(req,res)=>{
       const result = await data.toArray() 
       res.send(result)
     }
-
-    
-
  })
  app.post('/services', async(req,res)=>{
     serveiceObj = req.body.newService 
@@ -60,6 +56,20 @@ app.get('/services', async(req,res)=>{
     res.status(201).send({ message:"Service Created Successfull !" , docId:result.insertedId})
  })
 
+
+
+app.get('/reviews',async(req,res)=>{ 
+  const  data =  reviews.find({})
+  const result = await data.toArray()
+  res.send(result)
+
+})
+app.post('/review',async(req,res)=>{ 
+  reviewObj = req.body.newReview
+  const  result = await reviews.insertOne(reviewObj)
+  res.status(201).send({ message:"Review Created Successfull !" , docId:result.insertedId})
+
+})
 /*=================================================================
           App init  
 ==================================================================*/ 
