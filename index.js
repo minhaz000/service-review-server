@@ -65,6 +65,15 @@ app.get('/reviews',async(req,res)=>{
   res.send(result)
 
 })
+app.get('/my-reviews',async(req,res)=>{
+  const email = req.query.email 
+
+  const data = reviews.find({email:email})
+  const result = await data.toArray()
+  res.send(result)
+})
+
+
 app.post('/review',async(req,res)=>{ 
   reviewObj = req.body.newReview
   const  result = await reviews.insertOne(reviewObj)
