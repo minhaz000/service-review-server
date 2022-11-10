@@ -14,14 +14,14 @@ function veryfyjwt (req,res,next) {
   const header = req.headers.authorization
  
   if(!header){
-     res.status(401).send(" unauthorized access !!!" )
+     res.status(401).send("unauthorized access !!!" )
   }
  
-   token = header.split(" unauthorized access !!!")
+   token = header.split(" ")
  
    jwt.verify(token , process.env.ACCESS_TOKEN_SECRET, (err,decode)=>{
      if(err){
-     res.status(401).send(" you fuckedup!!! " )
+     res.status(401).send("unauthorized access !!!"  )
  
      }
    })
@@ -64,7 +64,7 @@ app.get('/services', async(req,res)=>{
       res.send(result)   
     }
     else{
-      const data   = services.find({}).limit(lim)
+      const data   = services.find({}).limit(lim).sort({$natural:-1})cd
       const result = await data.toArray() 
       res.send(result)
     }
@@ -84,7 +84,7 @@ app.get('/reviews',async(req,res)=>{
   res.send(result)
 
 })
-app.get('/my-reviews',veryfyjwt,async(req,res)=>{
+app.get('/my-reviews',async(req,res)=>{
   const email = req.query.email 
 
   const data = reviews.find({email:email})
