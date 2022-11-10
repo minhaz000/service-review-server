@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config()
 require('colors')
@@ -9,6 +10,24 @@ const app = express()
                    MiddleWare 
 ==================================================================*/     app.use(cors())
 app.use(express.json())
+function veryfyjwt (req,res,next) {
+  const header = req.headers.authorization
+ 
+  if(!header){
+     res.status(401).send(" unauthorized access !!!" )
+  }
+ 
+   token = header.split(" unauthorized access !!!")
+ 
+   jwt.verify(token , process.env.ACCESS_TOKEN_SECRET, (err,decode)=>{
+     if(err){
+     res.status(401).send(" you fuckedup!!! " )
+ 
+     }
+   })
+     next()
+ 
+ }
 /*=================================================================
               Data Base Connection 
 ==================================================================*/
@@ -65,7 +84,7 @@ app.get('/reviews',async(req,res)=>{
   res.send(result)
 
 })
-app.get('/my-reviews',async(req,res)=>{
+app.get('/my-reviews',veryfyjwt,async(req,res)=>{
   const email = req.query.email 
 
   const data = reviews.find({email:email})
@@ -79,6 +98,11 @@ app.post('/review',async(req,res)=>{
   const  result = await reviews.insertOne(reviewObj)
   res.status(201).send({ message:"Review Created Successfull !" , docId:result.insertedId})
 
+})
+app.post('/jwt',(req,res)=>{
+  const user = req.body
+  const token = jwt.sign(user , process.env.ACCESS_TOKEN_SECRET)
+  res.send({token})
 })
 /*=================================================================
           App init  
