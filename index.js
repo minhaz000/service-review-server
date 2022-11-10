@@ -59,7 +59,8 @@ app.get('/services', async(req,res)=>{
 
 
 app.get('/reviews',async(req,res)=>{ 
-  const  data =  reviews.find({})
+  const q = req.query.q
+  const  data =  reviews.find({serveiceId:q})
   const result = await data.toArray()
   res.send(result)
 
